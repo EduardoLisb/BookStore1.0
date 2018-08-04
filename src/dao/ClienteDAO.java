@@ -15,12 +15,12 @@ public class ClienteDAO {
 		PreparedStatement stmt = null;
 		try {
 
-			// EnderecoDAO.create(e);
+			 EnderecoDAO.create(e);
 
-			// Pessoa p = new Pessoa(c.getCpf(), Sexo.valueOf(c.getSx()), c.getDt_nasc(),
-			// c.getNome(), c.getIdade(), c.getCep(), c.getNumero());
+			 Pessoa p = new Pessoa(c.getCpf(), Sexo.valueOf(c.getSx()), c.getDt_nasc(),
+			 c.getNome(), c.getIdade(), c.getCep(), c.getNumero());
 
-			// PessoaDAO.create(p);
+			 PessoaDAO.create(p);
 
 			stmt = con.prepareStatement(
 					"INSERT INTO cliente (cpf, eh_professor, status, dt_fim_adesao, dt_adesao, cod_plano, pontosFidelidade, cnpj_filial) VALUES (?,?,?,?,?,?,?,?)");
