@@ -4,41 +4,43 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import beans.Gerente;
+import beans.Caixa;
+import beans.PDV;
 import connection.ConnectionFactory;
 
-public class GerenteDAO {
-
-	public static void create(Gerente g) {
+public class CaixaDAO {
+	public static void create(Caixa cx, PDV pdv) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
-			stmt = con.prepareStatement("INSERT INTO gerente (cpf, dt_inicio, dt_fim) VALUES (?,?,?)");
-			stmt.setLong(1, g.getCpf());
-			stmt.setDate(2, g.getDt_inicio());
-			stmt.setDate(3, g.getDt_fim());
+			stmt = con.prepareStatement("INSERT INTO gerente (cpf, cod_pdv, dt_inicio, dt_fim ) VALUES (?,?,?,?)");
+			stmt.setLong(1, cx.getCpf());
+			stmt.setInt(2, pdv.getCod_pdv()); 
+			stmt.setDate(3, cx.getDt_inicio());
+			stmt.setDate(4, cx.getDt_fim());
 
 			stmt.executeUpdate();
 			stmt.close();
 			System.out.println("Chegou aqui");
 
 		} catch (SQLException ex) {
-			System.out.println("Erro GERENTEDAO Create" + ex);
+			System.out.println("Erro CAIXADAO Create" + ex);
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void update(long cpf, Gerente g) {
+	public static void update(long cpf, Caixa cx, PDV pdv) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
 			stmt = con.prepareStatement(
-					"UPDATE funcionario SET salario_base = ?, ramal = ?  WHERE cpf.gerente = cpf.funcionario");
-			stmt.setDouble(1, g.getSalario_base());
-			stmt.setInt(2, g.getRamal());
-			stmt.setLong(3, cpf);
+					"UPDATE funcionario SET salario_base = ?, ramal = ?, cod_pdv = ?  WHERE cpf.caixa = cpf.funcionario");
+			stmt.setDouble(1, cx.getSalario_base());
+			stmt.setInt(2, cx.getRamal());
+			stmt.setInt(3, pdv.getCod_pdv());
+			stmt.setLong(4, cpf);
 
 			stmt.executeUpdate();
 			stmt.close();
@@ -46,7 +48,7 @@ public class GerenteDAO {
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro GERENTEDAO Update" + ex);
+			System.out.println("Erro CAIXADAO Update" + ex);
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
@@ -56,7 +58,7 @@ public class GerenteDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
-			stmt = con.prepareStatement("DELETE FROM funcionario WHERE cpf.gerente = cpf.funcionario");
+			stmt = con.prepareStatement("DELETE FROM funcionario WHERE cpf.caixa = cpf.funcionario");
 			stmt.setLong(1, cpf);
 
 			stmt.executeUpdate();
@@ -65,7 +67,7 @@ public class GerenteDAO {
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro GERENTEDAO Delete" + ex);
+			System.out.println("Erro CAIXADAO Delete" + ex);
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
