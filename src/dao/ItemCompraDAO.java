@@ -17,15 +17,15 @@ public class ItemCompraDAO {
 		try {
 
 			// ADICIONANDO PRODUTOREF
-			ProdutoRef prodRef = new ProdutoRef(iC.getCod_produto(), iC.getPreco(), iC.getDesc_produto(),
-					iC.getPreco_fornecedor(), iC.getCod_barra(), iC.getCnpj_fornecedor(), iC.getMarca());
-			ProdutoRefDAO.create(prodRef);
-
-			// ADICIONANDO COMPRA
-			Compra compra = new Compra(iC.getCod_compra(), iC.getVl_desconto(), iC.getVl_imposto(), iC.getDt_compra(),
-					iC.getVl_comissao(), iC.getVl_total_bruto(), iC.getVl_total_a_pagar(), iC.getCod_pdv(),
-					iC.getCpf_vendedor(), iC.getCpf_cliente());
-			CompraDAO.create(compra);
+//			ProdutoRef prodRef = new ProdutoRef(iC.getCod_produto(), iC.getPreco(), iC.getDesc_produto(),
+//					iC.getPreco_fornecedor(), iC.getCod_barra(), iC.getCnpj_fornecedor(), iC.getMarca());
+//			ProdutoRefDAO.create(prodRef);
+//
+//			// ADICIONANDO COMPRA
+//			Compra compra = new Compra(iC.getCod_compra(), iC.getVl_desconto(), iC.getVl_imposto(), iC.getDt_compra(),
+//					iC.getVl_comissao(), iC.getVl_total_bruto(), iC.getVl_total_a_pagar(), iC.getCod_pdv(),
+//					iC.getCpf_vendedor(), iC.getCpf_cliente());
+//			CompraDAO.create(compra);
 
 			stmt = con.prepareStatement(
 					"INSERT INTO item_compra (cod_produto, qtd, cod_compra, vl_unitario) VALUES (?,?,?,?)");
