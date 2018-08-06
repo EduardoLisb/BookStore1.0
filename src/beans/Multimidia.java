@@ -31,8 +31,8 @@ public class Multimidia extends ProdutoRef {
 		this.duracao = duracao;
 	}
 
-	public TipoMultimidia getTp() {
-		return tp;
+	public String getTp() {
+		return tp.toString();
 	}
 
 	public void setTp(TipoMultimidia tp) {
