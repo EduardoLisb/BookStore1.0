@@ -47,7 +47,7 @@ public class ItemEstoqueDAO {
 			stmt.setInt(3, iE.getQtd_minima());
 			stmt.setLong(4, iE.getQtd_atual());
 			stmt.setLong(5, cod_produto);
-			
+
 			stmt.executeUpdate();
 			stmt.close();
 			;

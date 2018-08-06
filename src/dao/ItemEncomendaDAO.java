@@ -8,16 +8,11 @@ import beans.ItemEncomenda;
 import connection.ConnectionFactory;
 
 public class ItemEncomendaDAO {
-	
+
 	public static void create(ItemEncomenda iE) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
-			
-//			public Encomenda id_encomenda;
-//			public ProdutoRef cod_produto;
-//			public int qntd;
-
 
 			stmt = con.prepareStatement("INSERT INTO item_estoque (id_encomenda, cod_produto, qntd ) VALUES (?,?,?)");
 			stmt.setInt(1, iE.getId_encomenda().getId_encomenda());

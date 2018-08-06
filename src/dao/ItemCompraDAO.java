@@ -13,7 +13,6 @@ public class ItemCompraDAO {
 		PreparedStatement stmt = null;
 		try {
 
-
 			stmt = con.prepareStatement(
 					"INSERT INTO item_compra (cod_produto, qtd, cod_compra, vl_unitario) VALUES (?,?,?,?)");
 			stmt.setInt(1, iC.getCod_produto().getCod_produto());

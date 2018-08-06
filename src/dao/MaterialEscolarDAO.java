@@ -14,14 +14,13 @@ public class MaterialEscolarDAO {
 		PreparedStatement stmt = null;
 		try {
 
-			
-			//ADICIONANDO PRODUTOREF
+			// ADICIONANDO PRODUTOREF
 			ProdutoRef prodRef = new ProdutoRef(mE.getCod_produto(), mE.getPreco(), mE.getDesc_produto(),
 					mE.getPreco_fornecedor(), mE.getCod_barra(), mE.getCnpj_fornecedor(), mE.getMarca());
 
-			//CRIANDO PRODUTOREF
-			//ProdutoRefDAO.create(prodRef);
-			
+			// CRIANDO PRODUTOREF
+			// ProdutoRefDAO.create(prodRef);
+
 			stmt = con.prepareStatement(
 					"INSERT INTO material_escolar (desc_material, cod_produto, preco, desc_produto, preco_fornecedor, cod_barra, cnpj_fornecedor, marca) VALUES (?,?,?,?,?,?,?,?)");
 			stmt.setString(1, mE.getDesc_material());
@@ -32,7 +31,6 @@ public class MaterialEscolarDAO {
 			stmt.setInt(6, mE.getCod_barra());
 			stmt.setLong(7, mE.getCnpj_fornecedor().getCnpj_fornecedor());
 			stmt.setString(8, mE.getMarca());
-			
 
 			stmt.executeUpdate();
 			stmt.close();

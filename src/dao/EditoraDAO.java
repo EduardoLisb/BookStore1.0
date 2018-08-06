@@ -1,6 +1,5 @@
 package dao;
 
-
 import java.sql.SQLException;
 
 import beans.Editora;

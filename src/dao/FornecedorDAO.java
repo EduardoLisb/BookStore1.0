@@ -12,15 +12,14 @@ public class FornecedorDAO {
 		PreparedStatement stm = null;
 		try {
 			stm = con.prepareStatement("INSERT INTO fornecedor "
-					+ "(cnpj_fornecedor,nome_fantasia,dt_inicio,dt_fim,tipo)"
-					+ "VALUES(?,?,?,?,?)");
+					+ "(cnpj_fornecedor,nome_fantasia,dt_inicio,dt_fim,tipo)" + "VALUES(?,?,?,?,?)");
 			stm.setLong(1, f.getCnpj_fornecedor());
 			stm.setString(2, f.getNome_fantasia_fornecedor());
 			stm.setDate(3, f.getDt_inicio());
 			stm.setDate(4, f.getDt_fim());
-			stm.setString(5, f.getTipo()+"");
+			stm.setString(5, f.getTipo() + "");
 			stm.executeUpdate();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			throw e;
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
@@ -28,29 +27,29 @@ public class FornecedorDAO {
 //			con.close();
 		}
 	}
-	public static void update (Fornecedor f) throws SQLException {
+
+	public static void update(Fornecedor f) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
-			stm = con.prepareStatement("UPDATE fornecedor "
-					+ "SET nome_fantasia = ?, tipo = ? "
-					+ "WHERE cnpj_fornecedor = ?");
+			stm = con.prepareStatement(
+					"UPDATE fornecedor " + "SET nome_fantasia = ?, tipo = ? " + "WHERE cnpj_fornecedor = ?");
 			stm.setString(1, f.getNome_fantasia_fornecedor());
-			stm.setString(2, f.getTipo()+"");
+			stm.setString(2, f.getTipo() + "");
 			stm.setLong(3, f.getCnpj_fornecedor());
 			stm.executeUpdate();
-		} catch(SQLException exc) {
+		} catch (SQLException exc) {
 			throw exc;
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 		}
 	}
+
 	public static void delete(long cnpj) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
-			stm = con.prepareStatement("DELETE FROM fornecedor "
-					+ "WHERE cnpj_fornecedor = ?");
+			stm = con.prepareStatement("DELETE FROM fornecedor " + "WHERE cnpj_fornecedor = ?");
 			stm.setLong(1, cnpj);
 			stm.executeUpdate();
 		} catch (SQLException e) {
