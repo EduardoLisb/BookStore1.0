@@ -14,16 +14,14 @@ public class MultimidiaDAO {
 		PreparedStatement stmt = null;
 		try {
 
-			
-			//ADICIONANDO PRODUTOREF
+			// ADICIONANDO PRODUTOREF
 			ProdutoRef prodRef = new ProdutoRef(m.getCod_produto(), m.getPreco(), m.getDesc_produto(),
 					m.getPreco_fornecedor(), m.getCod_barra(), m.getCnpj_fornecedor(), m.getMarca());
 
-			//CRIANDO PRODUTOREF
-			//ProdutoRefDAO.create(prodRef);
-			
-			stmt = con.prepareStatement(
-					"INSERT INTO multimidia (titulo, duracao, //tipo multimidia//) VALUES (?,?,?)");
+			// CRIANDO PRODUTOREF
+			// ProdutoRefDAO.create(prodRef);
+
+			stmt = con.prepareStatement("INSERT INTO multimidia (titulo, duracao, //tipo multimidia//) VALUES (?,?,?)");
 			stmt.setString(1, m.getTitulo());
 			stmt.setInt(2, m.getDuracao());
 			stmt.setString(3, m.getTp());

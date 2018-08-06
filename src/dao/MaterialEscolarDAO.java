@@ -50,7 +50,7 @@ public class MaterialEscolarDAO {
 		PreparedStatement stmt = null;
 		try {
 			stmt = con.prepareStatement(
-					"UPDATE material_escolar SET preco = ?, desc_produto = ?, preco_fornecedor  WHERE cod_produto = ? ");
+					"UPDATE material_escolar SET preco = ?, desc_produto = ?, preco_fornecedor = ?  WHERE cod_produto = ? ");
 			stmt.setDouble(1, mE.getPreco());
 			stmt.setString(2, mE.getDesc_produto());
 			stmt.setDouble(3, mE.getPreco_fornecedor());
