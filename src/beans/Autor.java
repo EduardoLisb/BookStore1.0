@@ -1,6 +1,5 @@
 package beans;
 
-import java.sql.Date;
 
 public class Autor {
 

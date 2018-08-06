@@ -15,7 +15,6 @@ public class FuncionarioDAO {
     public static void create(Funcionario f, Endereco e){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
-        PreparedStatement stmt2 = null;
 
         try{
             //ADICIONANDO PESSOA

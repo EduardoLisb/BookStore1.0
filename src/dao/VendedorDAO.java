@@ -16,8 +16,10 @@ public class VendedorDAO {
 		PreparedStatement stmt = null;
 
 		try {
-			Funcionario f = new Funcionario(v.getDt_ferias(),v.getSalario_base(),v.getCodigo_empregado(),v.getRamal(),v.getCnpj_filial(),v.getCpf_gerente(), v.getCpf(), Sexo.valueOf(v.getSx()),v.getDt_nasc(),v.getNome(),v.getIdade(),v.getCep(),v.getNumero());
-			FuncionarioDAO.create(f,e);
+			Funcionario f = new Funcionario(v.getDt_ferias(), v.getSalario_base(), v.getCodigo_empregado(),
+					v.getRamal(), v.getCnpj_filial(), v.getCpf_gerente(), v.getCpf(), Sexo.valueOf(v.getSx()),
+					v.getDt_nasc(), v.getNome(), v.getIdade(), v.getCep(), v.getNumero());
+			FuncionarioDAO.create(f, e);
 			stmt = con.prepareStatement("INSERT INTO vendedor (cpf) VALUES (?)");
 			stmt.setLong(1, v.getCpf());
 

@@ -13,11 +13,13 @@ public class CaixaDAO {
 		PreparedStatement stmt = null;
 
 		try {
-			Funcionario f = new Funcionario(cx.getDt_ferias(),cx.getSalario_base(),cx.getCodigo_empregado(),cx.getRamal(),cx.getCnpj_filial(),null, cx.getCpf(), Sexo.valueOf(cx.getSx()),cx.getDt_nasc(),cx.getNome(),cx.getIdade(),cx.getCep(),cx.getNumero());
-			FuncionarioDAO.create(f,e);
+			Funcionario f = new Funcionario(cx.getDt_ferias(), cx.getSalario_base(), cx.getCodigo_empregado(),
+					cx.getRamal(), cx.getCnpj_filial(), null, cx.getCpf(), Sexo.valueOf(cx.getSx()), cx.getDt_nasc(),
+					cx.getNome(), cx.getIdade(), cx.getCep(), cx.getNumero());
+			FuncionarioDAO.create(f, e);
 			stmt = con.prepareStatement("INSERT INTO gerente (cpf, cod_pdv, dt_inicio, dt_fim ) VALUES (?,?,?,?)");
 			stmt.setLong(1, cx.getCpf());
-			stmt.setInt(2, pdv.getCod_pdv()); 
+			stmt.setInt(2, pdv.getCod_pdv());
 			stmt.setDate(3, cx.getDt_inicio());
 			stmt.setDate(4, cx.getDt_fim());
 

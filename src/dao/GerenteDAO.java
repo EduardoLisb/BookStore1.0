@@ -17,8 +17,10 @@ public class GerenteDAO {
 		PreparedStatement stmt = null;
 
 		try {
-			Funcionario f = new Funcionario(g.getDt_ferias(),g.getSalario_base(),g.getCodigo_empregado(),g.getRamal(),g.getCnpj_filial(),null, g.getCpf(), Sexo.valueOf(g.getSx()),g.getDt_nasc(),g.getNome(),g.getIdade(),g.getCep(),g.getNumero());
-			FuncionarioDAO.create(f,e);
+			Funcionario f = new Funcionario(g.getDt_ferias(), g.getSalario_base(), g.getCodigo_empregado(),
+					g.getRamal(), g.getCnpj_filial(), null, g.getCpf(), Sexo.valueOf(g.getSx()), g.getDt_nasc(),
+					g.getNome(), g.getIdade(), g.getCep(), g.getNumero());
+			FuncionarioDAO.create(f, e);
 			stmt = con.prepareStatement("INSERT INTO gerente (cpf, dt_inicio, dt_fim) VALUES (?,?,?)");
 			stmt.setLong(1, g.getCpf());
 			stmt.setDate(2, g.getDt_inicio());

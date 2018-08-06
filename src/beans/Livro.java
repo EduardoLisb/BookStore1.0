@@ -53,8 +53,8 @@ public class Livro extends ProdutoRef {
 		this.num_edicao = num_edicao;
 	}
 
-	public TipoLivro getTpLivro() {
-		return tpLivro;
+	public String getTpLivro() {
+		return tpLivro.toString();
 	}
 
 	public void setTpLivro(TipoLivro tpLivro) {

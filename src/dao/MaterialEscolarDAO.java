@@ -5,23 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import beans.Auxiliar;
-import beans.Endereco;
 import beans.Funcionario;
+import beans.MaterialEscolar;
 import beans.Sexo;
 import connection.ConnectionFactory;
 
-public class AuxiliarDAO {
-	public static void create(Auxiliar a, Endereco e) {
+public class MaterialEscolarDAO {
+	public static void create(MaterialEscolar mE) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
-
 		try {
-			Funcionario f = new Funcionario(a.getDt_ferias(), a.getSalario_base(), a.getCodigo_empregado(),
-					a.getRamal(), a.getCnpj_filial(), a.getCpf_gerente(), a.getCpf(), Sexo.valueOf(a.getSx()),
-					a.getDt_nasc(), a.getNome(), a.getIdade(), a.getCep(), a.getNumero());
+			Funcionario f = new Funcionario(mE.getDt_ferias(), mE.getSalario_base(), mE.getCodigo_empregado(),
+					mE.getRamal(), mE.getCnpj_filial(), mE.getCpf_gerente(), mE.getCpf(), Sexo.valueOf(mE.getSx()),
+					mE.getDt_nasc(), mE.getNome(), mE.getIdade(), mE.getCep(), mE.getNumero());
 			FuncionarioDAO.create(f, e);
 			stmt = con.prepareStatement("INSERT INTO auxiliar (cpf) VALUES (?)");
-			stmt.setLong(1, a.getCpf());
+			stmt.setLong(1, mE.getCpf());
 
 			stmt.executeUpdate();
 			stmt.close();
