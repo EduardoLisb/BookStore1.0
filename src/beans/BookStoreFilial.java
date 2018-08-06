@@ -7,8 +7,9 @@ public class BookStoreFilial {
 	public String razao_social;
 	public Endereco cep;
 	public Matriz cnpj_matriz;
+	private int num;
 
-	public BookStoreFilial(long cnpj_filial, String nome_fantasia_filial, String razao_social, Endereco cep,
+	public BookStoreFilial(long cnpj_filial, String nome_fantasia_filial, String razao_social, Endereco cep, int num,
 			Matriz cnpj_matriz) {
 		this.cnpj_filial = cnpj_filial;
 		this.nome_fantasia_filial = nome_fantasia_filial;
@@ -57,4 +58,11 @@ public class BookStoreFilial {
 		this.cnpj_matriz = cnpj_matriz;
 	}
 
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
 }
