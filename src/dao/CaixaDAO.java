@@ -4,16 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import beans.Caixa;
-import beans.PDV;
+import beans.*;
 import connection.ConnectionFactory;
 
 public class CaixaDAO {
-	public static void create(Caixa cx, PDV pdv) {
+	public static void create(Caixa cx, PDV pdv, Endereco e) {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
+			Funcionario f = new Funcionario(cx.getDt_ferias(),cx.getSalario_base(),cx.getCodigo_empregado(),cx.getRamal(),cx.getCnpj_filial(),null, cx.getCpf(), Sexo.valueOf(cx.getSx()),cx.getDt_nasc(),cx.getNome(),cx.getIdade(),cx.getCep(),cx.getNumero());
+			FuncionarioDAO.create(f,e);
 			stmt = con.prepareStatement("INSERT INTO gerente (cpf, cod_pdv, dt_inicio, dt_fim ) VALUES (?,?,?,?)");
 			stmt.setLong(1, cx.getCpf());
 			stmt.setInt(2, pdv.getCod_pdv()); 
