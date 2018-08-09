@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS cliente (
     constraint fk_cnpj_filial_cliente foreign key(cnpj_filial) references BOOKSTORE_FILIAL(cnpj_filial) on update cascade on delete set null
 );
 
+
 CREATE TABLE IF NOT EXISTS palestrante (
 	cpf bigint(11) not null,
     dt_ultima_palestra date,
@@ -88,7 +89,6 @@ CREATE TABLE IF NOT EXISTS autor (
     primary key(id_autor)
 );
 
-DROP TABLE funcionario;
 CREATE TABLE IF NOT EXISTS funcionario (
 	cpf bigint(11) not null,
     dt_ferias date,
