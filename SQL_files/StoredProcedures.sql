@@ -53,3 +53,16 @@ BEGIN
     pessoinha.cpf = (SELECT cpf_auxiliar FROM organiza where dt_ultima_reposicao=datadeultimareposicao);
 
 END$$
+
+DELIMETER $$
+USE `bookstore`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `SP_Get_CepEstado`(cpfCliente bigint, OUT estado varchar(20)) CHARSET latin1
+BEGIN
+	declare estado varchar(20);
+	SELECT cE.estado INTO estado
+    FROM pessoa P, cliente C, cep_Estado cE
+    WHERE C.cpf = cpfCliente AND
+    C.cpf = P.cpf AND
+    P.endereco_cep >= cE.cepInicio AND P.endereco_cep <= cE.cepFim;
+    return estado;
+END$$
