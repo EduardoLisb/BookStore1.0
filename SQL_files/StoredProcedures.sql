@@ -66,3 +66,10 @@ BEGIN
     P.endereco_cep >= cE.cepInicio AND P.endereco_cep <= cE.cepFim;
     return estado;
 END$$
+
+DELIMETER $$
+USE `bookstore`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `SP_Get_ItensAbaixoDoMinimo`(CHAR nome(3)) CHARSET latin1
+BEGIN
+	SELECT produto.* from multimidia where (produto.cod_produto = 
+END$$
