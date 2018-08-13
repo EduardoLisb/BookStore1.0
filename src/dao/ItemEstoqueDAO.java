@@ -8,11 +8,11 @@ import beans.ItemEstoque;
 import connection.ConnectionFactory;
 
 public class ItemEstoqueDAO {
-	public static void create(ItemEstoque iE) {
+	public static void create(ItemEstoque iE) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
-
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"INSERT INTO material_escolar (cod_prod, seq_sk, em_prateleira, preco_venda, qtd_minima, dt_entrada, qtd_atual, id_estoque, serial_prateleira) VALUES (?,?,?,?,?,?,?,?,?)");
 			stmt.setInt(1, iE.getCod_prod().getCod_produto());
@@ -26,20 +26,25 @@ public class ItemEstoqueDAO {
 			stmt.setInt(9, iE.getSerial_prateleira().getSerial_prateleira());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 
 		} catch (SQLException ex) {
-			System.out.println("Erro ITEMESTOQUEDAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void update(long cod_produto, ItemEstoque iE) {
+	public static void update(long cod_produto, ItemEstoque iE) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"UPDATE item_estoque SET em_prateleira = ?, preco_venda = ?, qtd_minima = ?, qtd_atual = ?,  WHERE cod_produto = ? ");
 			stmt.setBoolean(1, iE.getEm_prateleira());
@@ -49,31 +54,39 @@ public class ItemEstoqueDAO {
 			stmt.setLong(5, cod_produto);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro ITEMESTOQUEDAO Update" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void delete(long cod_produto) {
+	public static void delete(long cod_produto) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement("DELETE FROM item_estoque WHERE cod_produto = ?");
 			stmt.setLong(1, cod_produto);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
+
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro ITEMESTOQUEDAO Delete" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

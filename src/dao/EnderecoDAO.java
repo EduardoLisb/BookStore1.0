@@ -9,12 +9,12 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 public class EnderecoDAO {
-	public static void create(Endereco e) {
+	public static void create(Endereco e) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
-
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement("INSERT INTO endereco (cep,complemento, predio, logradouro) VALUES (?,?,?,?)");
 			stmt.setLong(1, e.getCep());
 
@@ -31,10 +31,14 @@ public class EnderecoDAO {
 			stmt.setString(4, e.getLogradouro());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro ENDERECODAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

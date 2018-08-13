@@ -11,6 +11,7 @@ public class FornecedorDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement("INSERT INTO fornecedor "
 					+ "(cnpj_fornecedor,nome_fantasia,dt_inicio,dt_fim,tipo)" + "VALUES(?,?,?,?,?)");
 			stm.setLong(1, f.getCnpj_fornecedor());
@@ -19,8 +20,12 @@ public class FornecedorDAO {
 			stm.setDate(4, f.getDt_fim());
 			stm.setString(5, f.getTipo() + "");
 			stm.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 //			stm.close();
@@ -32,14 +37,19 @@ public class FornecedorDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement(
 					"UPDATE fornecedor " + "SET nome_fantasia = ?, tipo = ? " + "WHERE cnpj_fornecedor = ?");
 			stm.setString(1, f.getNome_fantasia_fornecedor());
 			stm.setString(2, f.getTipo() + "");
 			stm.setLong(3, f.getCnpj_fornecedor());
 			stm.executeUpdate();
-		} catch (SQLException exc) {
-			throw exc;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 		}
@@ -49,11 +59,16 @@ public class FornecedorDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement("DELETE FROM fornecedor " + "WHERE cnpj_fornecedor = ?");
 			stm.setLong(1, cnpj);
 			stm.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 //			stm.close();

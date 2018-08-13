@@ -9,11 +9,11 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 public class ClienteDAO {
-	public static void create(Cliente c, Endereco e) {
+	public static void create(Cliente c, Endereco e) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
-
+			con.setAutoCommit(false);
 			Pessoa p = new Pessoa(c.getCpf(), Sexo.valueOf(c.getSx()), c.getDt_nasc(), c.getNome(), c.getIdade(),
 					c.getCep(), c.getNumero());
 
@@ -40,10 +40,14 @@ public class ClienteDAO {
 			stmt.setLong(8, c.getCnpj_filial());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro CLIENTEDAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

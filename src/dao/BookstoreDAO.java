@@ -9,10 +9,11 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 public class BookstoreDAO {
-	public static void create(BookStoreFilial bF) {
+	public static void create(BookStoreFilial bF) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			if (bF.getCep() != null)
 				EnderecoDAO.create(bF.cep);
 			stmt = con.prepareStatement(
@@ -31,19 +32,24 @@ public class BookstoreDAO {
 			stmt.setLong(6, bF.getCnpj_matriz().getCnpj_matriz());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro BOOKSTOREDAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void update(BookStoreFilial bF) {
+	public static void update(BookStoreFilial bF) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"UPDATE bookstore_filial SET  nome_fantasia = ?, endereco_cep = ?, endereco_num = ?, cnpj_matriz = ? WHERE cnpj_filial = ?");
 			stmt.setString(1, bF.getNome_fantasia_filial());
@@ -59,10 +65,14 @@ public class BookstoreDAO {
 			stmt.setLong(5, bF.getCnpj_filial());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro BOOKSTOREDAO Update" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

@@ -9,10 +9,11 @@ import java.sql.SQLException;
 
 public class LivroDAO {
 
-	public static void create(Livro l) {
+	public static void create(Livro l) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"INSERT INTO livro (isbn, titulo, dt_ultima_edicao, num_edicao, tpLivro) VALUES (?,?,?,?,?)");
 			stmt.setLong(1, l.getIsbn());
@@ -22,10 +23,14 @@ public class LivroDAO {
 			stmt.setString(5, l.getTpLivro());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro LIVRODAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
@@ -35,6 +40,7 @@ public class LivroDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"UPDATE livro SET  titulo = ?, dt_ultima_edicao = ?, num_edicao = ? WHERE isbn = ?");
 			stmt.setString(1, l.getTitulo());
@@ -43,8 +49,8 @@ public class LivroDAO {
 			stmt.setLong(4, isbn);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
@@ -54,20 +60,25 @@ public class LivroDAO {
 		}
 	}
 
-	public static void delete(int isbn) {
+	public static void delete(int isbn) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement("DELETE FROM livro WHERE isbn = ?");
 			stmt.setInt(1, isbn);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
+
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro ISBNDAO Delete" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
