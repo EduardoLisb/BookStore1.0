@@ -12,6 +12,7 @@ public class EstoqueDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement("INSERT INTO estoque "
 					+ "(id_estoque, dt_ultima_compra, desc_estoque, cnpj_filial)" + "VALUES(?,?,?,?)");
 			stm.setInt(1, e.getId_Estoque());
@@ -19,8 +20,12 @@ public class EstoqueDAO {
 			stm.setString(3, e.getDesc());
 			stm.setLong(4, e.getCnpj_filial().getCnpj_filial());
 			stm.executeUpdate();
-		} catch (SQLException exc) {
-			throw exc;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 //			stm.close();
@@ -32,14 +37,19 @@ public class EstoqueDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement(
 					"UPDATE estoque " + "SET dt_ultima_compra = ?, desc_estoque = ? " + "WHERE id_estoque = ?");
 			stm.setDate(1, e.getDt_ultima_compra());
 			stm.setString(2, e.getDesc());
 			stm.setInt(3, e.getId_Estoque());
 			stm.executeUpdate();
-		} catch (SQLException exc) {
-			throw exc;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 		}
@@ -49,11 +59,16 @@ public class EstoqueDAO {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stm = null;
 		try {
+			con.setAutoCommit(false);
 			stm = con.prepareStatement("DELETE FROM estoque " + "WHERE id_estoque = ?");
 			stm.setInt(1, id_estoque);
 			stm.executeUpdate();
-		} catch (SQLException e) {
-			throw e;
+			con.commit();
+		} catch (SQLException ex) {
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stm);
 //			stm.close();

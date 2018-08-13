@@ -11,11 +11,13 @@ import beans.Sexo;
 import connection.ConnectionFactory;
 
 public class AuxiliarDAO {
-	public static void create(Auxiliar a, Endereco e) {
+	public static void create(Auxiliar a, Endereco e) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
+			con.setAutoCommit(false);
+
 			Funcionario f = new Funcionario(a.getDt_ferias(), a.getSalario_base(), a.getCodigo_empregado(),
 					a.getRamal(), a.getCnpj_filial(), a.getCpf_gerente(), a.getCpf(), Sexo.valueOf(a.getSx()),
 					a.getDt_nasc(), a.getNome(), a.getIdade(), a.getCep(), a.getNumero());
@@ -24,20 +26,25 @@ public class AuxiliarDAO {
 			stmt.setLong(1, a.getCpf());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			System.out.println("Chegou aqui");
 
 		} catch (SQLException ex) {
-			System.out.println("Erro AUXILIARDAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void update(long cpf, Auxiliar a) {
+	public static void update(long cpf, Auxiliar a) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
+
 			stmt = con.prepareStatement(
 					"UPDATE auxiliar SET salario_base = ?, ramal = ?  WHERE cpf.auxiliar = cpf.funcionario");
 			stmt.setDouble(1, a.getSalario_base());
@@ -45,31 +52,39 @@ public class AuxiliarDAO {
 			stmt.setLong(3, cpf);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
-			System.out.println("Chegou aqui");
+
 		} catch (SQLException ex) {
-			System.out.println("Erro AUXILIARDAO Update" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void delete(long cpf) {
+	public static void delete(long cpf) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
+
 			stmt = con.prepareStatement("DELETE FROM funcionario WHERE cpf.auxiliar = cpf.funcionario");
 			stmt.setLong(1, cpf);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro AUXILIARDAO Delete" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

@@ -12,11 +12,12 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 public class FuncionarioDAO {
-	public static void create(Funcionario f, Endereco e) {
+	public static void create(Funcionario f, Endereco e) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 
 		try {
+			con.setAutoCommit(false);
 			// ADICIONANDO PESSOA
 			Pessoa pessoa = new Pessoa(f.getCpf(), Sexo.valueOf(f.getSx()), f.getDt_nasc(), f.getNome(), f.getIdade(),
 					f.getCep(), f.getNumero());
@@ -35,10 +36,14 @@ public class FuncionarioDAO {
 				stmt.setLong(5, f.getCpf_gerente().getCpf());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro FUNCIONARIODAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

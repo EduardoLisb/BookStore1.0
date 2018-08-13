@@ -10,10 +10,11 @@ import java.sql.Types;
 
 public class CompraDAO {
 
-	public static void create(Compra c) {
+	public static void create(Compra c) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"INSERT INTO compra (cod_compra, vl_desconto, vl_imposto, dt_compra, vl_comissao, vl_total_bruto"
 							+ "vl_total_a_pagar, cod_pdv, cod_compra, cpf_vendedor, cpf_cliente) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
@@ -39,10 +40,14 @@ public class CompraDAO {
 			stmt.setLong(11, c.getCpf_cliente().getCpf());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro COMPRADAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}

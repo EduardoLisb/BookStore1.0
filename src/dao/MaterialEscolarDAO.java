@@ -9,17 +9,18 @@ import beans.ProdutoRef;
 import connection.ConnectionFactory;
 
 public class MaterialEscolarDAO {
-	public static void create(MaterialEscolar mE) {
+	public static void create(MaterialEscolar mE) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 
 			// ADICIONANDO PRODUTOREF
 			ProdutoRef prodRef = new ProdutoRef(mE.getCod_produto(), mE.getPreco(), mE.getDesc_produto(),
 					mE.getPreco_fornecedor(), mE.getCod_barra(), mE.getCnpj_fornecedor(), mE.getMarca());
 
 			// CRIANDO PRODUTOREF
-			// ProdutoRefDAO.create(prodRef);
+			//ProdutoRefDAO.create(prodRef);
 
 			stmt = con.prepareStatement(
 					"INSERT INTO material_escolar (desc_material, cod_produto, preco, desc_produto, preco_fornecedor, cod_barra, cnpj_fornecedor, marca) VALUES (?,?,?,?,?,?,?,?)");
@@ -33,20 +34,25 @@ public class MaterialEscolarDAO {
 			stmt.setString(8, mE.getMarca());
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
 			System.out.println("Chegou aqui");
 
 		} catch (SQLException ex) {
-			System.out.println("Erro MATERIALESCOLARDAO Create" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void update(long cod_produto, MaterialEscolar mE) {
+	public static void update(long cod_produto, MaterialEscolar mE) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement(
 					"UPDATE material_escolar SET preco = ?, desc_produto = ?, preco_fornecedor = ?  WHERE cod_produto = ? ");
 			stmt.setDouble(1, mE.getPreco());
@@ -55,31 +61,38 @@ public class MaterialEscolarDAO {
 			stmt.setLong(4, cod_produto);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro MATERIALESCOLARDAO Update" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
 	}
 
-	public static void delete(long cod_produto) {
+	public static void delete(long cod_produto) throws SQLException {
 		Connection con = ConnectionFactory.getConnection();
 		PreparedStatement stmt = null;
 		try {
+			con.setAutoCommit(false);
 			stmt = con.prepareStatement("DELETE FROM material_escolar WHERE cod_produto = ?");
 			stmt.setLong(1, cod_produto);
 
 			stmt.executeUpdate();
+			con.commit();
 			stmt.close();
-			;
 
 			System.out.println("Chegou aqui");
 		} catch (SQLException ex) {
-			System.out.println("Erro MATERIALESCOLARDAO Delete" + ex);
+			if (con != null) {
+				con.rollback();
+				System.out.println("Connection rollback..." + ex);
+			}
 		} finally {
 			ConnectionFactory.closeConnection(con, stmt);
 		}
