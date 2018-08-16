@@ -14,9 +14,11 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import beans.Sexo;
 import beans.Vendedor;
+import dao.VendedorDAO;
 
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class TelaCadastroVendedor extends JFrame {
@@ -73,37 +75,26 @@ public class TelaCadastroVendedor extends JFrame {
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (textNome.getText().equals("") || textCPF.getText().equals("")
-						|| textRamal.getText().equals("") || textIdade.getText().equals("")
-						|| passwordField.getPassword().equals("") || textEndereco.getText().equals("")) {
+				if (textNome.getText().equals("") || textCPF.getText().equals("") || textRamal.getText().equals("")
+						|| textIdade.getText().equals("") || passwordField.getPassword().equals("")
+						|| textEndereco.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campops");
 				} else {
 					try {
-						Vendedor vendedor = new Vendedor();
-						vendedor.setNome(textField.getText());
-						//vendedor.setCpf(cpf);(caixaEmail.getText());
-						//vendedor.setTelefoneEmpresa(Integer.parseInt(caixaTelefoneDaEmpresa.getText()));
-						//vendedor.setRua(caixaRua.getText());
-						//vendedor.setCidade(caixaCidade.getText());
-						//vendedor.setEstado(caixaEstado.getText());
-						//vendedor.setPais(caixaPais.getText());
-						//endedor.setCep(caixaCep.getText());
-						//vendedor.setCnpj(caixaCnpj.getText());
-						//vendedor.setRazaoSocial(caixaRazao.getText());
-						//vendedor.setNomeEmpresa(caixaNomeEmpresa.getText());
-						//vendedor.setSenha(passwordField.getPassword());
-						//Fachada fachada = Fachada.getInstance();
-						//fachada.cadastrarLoja(vendedor);
+						VendedorDAO vendDao = new VendedorDAO();
+						if (vendDao instanceof VendedorDAO) {
 
-						JOptionPane.showMessageDialog(null, "Loja cadastrada com sucesso");
+							vendDao.create(textCPF.getText(), textEndereco.getText());
+							JOptionPane.showMessageDialog(null, "Vendedor cadastrado com sucesso");
 
-						TelaEspacoADM telaADM = new TelaEspacoADM();
-						telaADM.setResizable(false);
-						telaADM.setLocationRelativeTo(null);
-						telaADM.setVisible(true);
-						dispose();
-					} catch (NumberFormatException nfe) {
-						JOptionPane.showMessageDialog(null, "Digite um numero no campo do telefone!");
+							TelaEspacoADM telaADM = new TelaEspacoADM();
+							telaADM.setResizable(false);
+							telaADM.setLocationRelativeTo(null);
+							telaADM.setVisible(true);
+							dispose();
+						}
+					} catch (SQLException sql) {
+
 					}
 				}
 			}
