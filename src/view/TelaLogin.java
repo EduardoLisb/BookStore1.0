@@ -105,7 +105,10 @@ public class TelaLogin extends JFrame {
 					telaADM.setLocationRelativeTo(null);
 					telaADM.setVisible(true);
 					dispose();
-				} /* fazer veriicaçao pra saber se o user existe */
+				} else {
+					
+					/* fazer veriicaçao pra saber se o user existe */
+				}
 				
 				
 
