@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
@@ -23,9 +24,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
-
-
-
 
 /* CLICA BOTAO DIREITO EM VIEW, NEW > (ULTIMAOPCAO) OTHER > JFRAME
  * DPS QUE CRIA, CLICA EM CONTENTPANE
@@ -45,7 +43,7 @@ public class TelaLogin extends JFrame {
 
 	private JPanel contentPane;
 	private JPasswordField passwordField;
-	private JTextField textField;
+	private JTextField textID;
 
 	/**
 	 * Launch the application.
@@ -76,31 +74,44 @@ public class TelaLogin extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel botaoLogin = new JLabel("ID");
 		botaoLogin.setBackground(Color.GRAY);
 		botaoLogin.setBounds(25, 52, 46, 14);
 		contentPane.add(botaoLogin);
-		
+
 		JLabel lblSenha = new JLabel("Senha");
 		lblSenha.setBounds(25, 95, 46, 14);
 		contentPane.add(lblSenha);
-		
+
 		passwordField = new JPasswordField();
 		passwordField.setBounds(117, 92, 230, 20);
 		contentPane.add(passwordField);
-		
-		textField = new JTextField();
-		textField.setBounds(117, 49, 230, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
+
+		textID = new JTextField();
+		textID.setBounds(117, 49, 230, 20);
+		contentPane.add(textID);
+		textID.setColumns(10);
+
 		JButton btnLogin = new JButton("Login");
-		btnLogin.setBounds(25, 149, 89, 23);
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (textID.getText().equals("") && passwordField.getText().equals("")) {
+
+					JOptionPane.showMessageDialog(null, "Preencha todos os espacos");
+				} else if (textID.getText().equals("bookstore") && passwordField.getText().equals("123")) {
+					TelaEspacoADM telaADM = new TelaEspacoADM();
+					telaADM.setResizable(false);
+					telaADM.setLocationRelativeTo(null);
+					telaADM.setVisible(true);
+					dispose();
+				} /* fazer veriicaçao pra saber se o user existe */
+				
+				
+
+			}
+		});
+		btnLogin.setBounds(162, 155, 89, 23);
 		contentPane.add(btnLogin);
-		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(259, 149, 89, 23);
-		contentPane.add(btnCadastrar);
 	}
 }
