@@ -36,3 +36,29 @@ BEGIN
     LIMIT 0,1;
     return tipo;
 END//
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `verificarAdimplencia`(cpfCliente bigint) RETURNS tinyint(1)
+BEGIN
+	DECLARE emDia BOOLEAN;
+    DECLARE totalCompras INTEGER;
+    DECLARE totalPagamentos INTEGER;
+    SELECT cliente.cpf, compra.cod_compra, COUNT(*) INTO totalCompras
+    FROM cliente, compra, nota_fiscal
+    WHERE
+		cliente.cpf = cpfCliente AND
+        compra.cpf_cliente = cliente.cpf AND
+        nota_fiscal.cod_compra = compra.cod_compra;
+	SELECT cliente.cpf, compra.cod_compra, nota_fiscal.codigoNF, pagamento.cod_pag, COUNT(*) INTO totalPagamentos
+    FROM cliente, compra, nota_fiscal, pagamento
+    WHERE
+		cliente.cpf = cpfCliente AND
+        compra.cpf_cliente = cliente.cpf AND
+        nota_fiscal.cod_compra = compra.cod_compra AND
+        nota_fiscal.codigoNF = pagamento.codigoNF;
+        
+	IF totalCompras = totalPagamentos THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END//
