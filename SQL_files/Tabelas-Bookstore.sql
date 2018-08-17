@@ -26,11 +26,12 @@ CREATE TABLE IF NOT EXISTS evento (
     desc_evento varchar(20) not null,
     requer_inscricao boolean not null,
     dt_inicio_divul date,
-    cpf_palestrante bigint(11) unique,
+    cpf_palestrante bigint(11),
     dt_realizacao date not null,
-    cnpj_filial bigint(14) not null unique,
-    cod_tipo integer(5) unique,
+    cnpj_filial bigint(14) not null,
+    cod_tipo integer(5),
     primary key(cod_evento),
+    unique key (cod_evento, cpf_palestrante),
     constraint fk_palestrante foreign key(cpf_palestrante) references PALESTRANTE(cpf) on update cascade on delete set null,
     constraint fk_filial foreign key(cnpj_filial) references BOOKSTORE_FILIAL(cnpj_filial) on update cascade on delete cascade,
     constraint fk_tipo_evento foreign key(cod_tipo) references TIPO_EVENTO(cod_tipo) on update cascade on delete set null
@@ -193,9 +194,10 @@ CREATE TABLE IF NOT EXISTS produto_ref (
     desc_produto char(20) not null,
     preco_fornecedor double,
     cod_barra bigint(15) unique,
-    cnpj_fornecedor bigint(14) unique,
+    cnpj_fornecedor bigint(14),
     marca char(10),
     primary key(cod_produto),
+    unique key(cod_produto, cnpj_fornecedor),
     constraint fk_cnpj_fornecedor foreign key(cnpj_fornecedor) references FORNECEDOR(cnpj_fornecedor) on update cascade on delete set null
     
 );
@@ -243,9 +245,10 @@ CREATE TABLE IF NOT EXISTS item_estoque (
     qtd_minima integer(5),
     dt_entrada date,
     qtd_atual integer(5),
-    id_estoque integer(5) unique,
-    serial_prateleira integer(5) unique,
+    id_estoque integer(5),
+    serial_prateleira integer(5),
     primary key(cod_produto, seq_SK),
+    unique key(cod_produto, id_estoque, serial_prateleira),
     constraint fk_cod_prod_item foreign key(cod_produto) references PRODUTO_REF(cod_produto) on update cascade on delete cascade,
     constraint fk_id_estoque_item foreign key(id_estoque) references ESTOQUE(id_estoque) on update cascade on delete restrict,
     constraint fk_item_serial_prateleira foreign key(serial_prateleira) references PRATELEIRA(serial_prateleira) on update cascade on delete set null
@@ -302,16 +305,16 @@ CREATE TABLE IF NOT EXISTS pagamento (
     constraint fk_codigoNF foreign key (codigoNF) references NOTA_FISCAL(codigoNF) on update restrict on delete cascade
 );
 CREATE TABLE IF NOT EXISTS compra (
-	cod_compra integer(10) not null,
+	cod_compra integer(10) not null auto_increment,
     vl_desconto double,
     vl_imposto double,
     dt_compra date not null,
     vl_comissao double,
     vl_total_bruto double not null,
     vl_total_a_pagar double not null,
-    cod_pdv integer(10) unique,
-    cpf_vendedor bigint(11) unique,
-    cpf_cliente bigint(11) not null unique,
+    cod_pdv integer(10),
+    cpf_vendedor bigint(11),
+    cpf_cliente bigint(11) not null,
     primary key(cod_compra),
     constraint fk_cod_pdv_compra foreign key (cod_pdv) references PDV(cod_pdv) on update cascade on delete set null,
     constraint fk_cpf_vendedor_compra foreign key (cpf_vendedor) references VENDEDOR(cpf) on update cascade on delete set null,
@@ -345,7 +348,7 @@ CREATE TABLE IF NOT EXISTS estoque (
 
 CREATE TABLE IF NOT EXISTS genero_livro (
 	cod_livro integer(10) not null unique,
-    cod_genero integer(5) not null unique,
+    cod_genero integer(5) not null,
     key(cod_livro, cod_genero),
     constraint fk_cod_livro foreign key(cod_livro) references LIVRO(isbn) on update cascade on delete cascade,
     constraint fk_cod_genero foreign key(cod_genero) references GENERO(cod_genero) on update cascade on delete cascade
@@ -353,7 +356,7 @@ CREATE TABLE IF NOT EXISTS genero_livro (
 
 CREATE TABLE IF NOT EXISTS organiza (
 	cpf_auxiliar bigint(11) not null,
-    serial_prateleira integer(10) not null unique,
+    serial_prateleira integer(10) not null,
     dt_inicio date,
     dt_fim date,
     dt_ultima_reposicao date,
@@ -364,10 +367,10 @@ CREATE TABLE IF NOT EXISTS organiza (
 
 CREATE TABLE IF NOT EXISTS inscricao (
 	cod_evento integer(5) not null,
-    cpf_cliente bigint(11) not null unique,
+    cpf_cliente bigint(11) not null,
     dt_inscricao date,
     compareceu boolean,
-	key(cod_evento, cpf_cliente),
+	unique key(cod_evento, cpf_cliente),
     constraint fk_cod_evento foreign key (cod_evento) references EVENTO(cod_evento) on update cascade on delete cascade,
     constraint cpf_cliente foreign key (cpf_cliente) references CLIENTE(cpf) on update cascade on delete cascade
 );
