@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import beans.BookStoreFilial;
+import beans.Endereco;
+import beans.Matriz;
+
 public class ConnectionFactory {
 
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -54,5 +58,9 @@ public class ConnectionFactory {
 		} catch (SQLException ex) {
 			System.err.println("Erro:" + ex);
 		}
+	}
+	// retorna alguma filial ai
+	public static BookStoreFilial getFilial() {
+		return new BookStoreFilial(3333333333L, "", "", new Endereco(0, "", "", ""), 0, new Matriz(0, ""));
 	}
 }

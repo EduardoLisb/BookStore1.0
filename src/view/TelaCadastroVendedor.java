@@ -12,8 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+
+import beans.Endereco;
+import beans.Funcionario;
 import beans.Sexo;
 import beans.Vendedor;
+import connection.ConnectionFactory;
+import dao.FuncionarioDAO;
 import dao.VendedorDAO;
 
 import javax.swing.JPasswordField;
@@ -81,20 +86,21 @@ public class TelaCadastroVendedor extends JFrame {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campops");
 				} else {
 					try {
-						VendedorDAO vendDao = new VendedorDAO();
-						if (vendDao instanceof VendedorDAO) {
+						Funcionario f = new Funcionario((long) Integer.parseInt(textCPF.getText()));
+						f.setCnpj_filial(ConnectionFactory.getFilial());
+						f.setRamal(Integer.parseInt(textRamal.getText()));
+						Endereco end = new Endereco(0, "", "", "");
+						FuncionarioDAO.create(f, end);
+//						VendedorDAO.create(f, end);
+						JOptionPane.showMessageDialog(null, "Vendedor cadastrado com sucesso");
 
-							vendDao.create(textCPF.getText(), textEndereco.getText());
-							JOptionPane.showMessageDialog(null, "Vendedor cadastrado com sucesso");
-
-							TelaEspacoADM telaADM = new TelaEspacoADM();
-							telaADM.setResizable(false);
-							telaADM.setLocationRelativeTo(null);
-							telaADM.setVisible(true);
-							dispose();
-						}
+						TelaEspacoADM telaADM = new TelaEspacoADM();
+						telaADM.setResizable(false);
+						telaADM.setLocationRelativeTo(null);
+						telaADM.setVisible(true);
+						dispose();
 					} catch (SQLException sql) {
-
+						
 					}
 				}
 			}
