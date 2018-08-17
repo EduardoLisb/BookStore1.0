@@ -11,5 +11,8 @@ public class Vendedor extends Funcionario {
 				cep, num);
 
 	}
+	public Vendedor(long cpf) {
+		super(cpf);
+	}
 
 }

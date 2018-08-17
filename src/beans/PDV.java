@@ -13,7 +13,9 @@ public class PDV {
 		this.dt_ult_manuntencao = dt_ult_manuntencao;
 		this.desc_pdv = desc_pdv;
 	}
-
+	public PDV(int cod) {
+		this.cod_pdv = cod;
+	}
 	public int getCod_pdv() {
 		return cod_pdv;
 	}

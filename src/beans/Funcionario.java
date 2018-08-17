@@ -10,7 +10,9 @@ public class Funcionario extends Pessoa {
 	public int ramal;
 	public BookStoreFilial cnpj_filial;
 	public Gerente cpf_gerente;
-
+	public Funcionario(long cpf) {
+		super(cpf);
+	}
 	public Funcionario(Date dt_ferias, double salario_base, int codigo_empregado, int ramal,
 			BookStoreFilial cnpj_filial, Gerente cpf_gerente, long cpf, Sexo sx, Date dt_nasc, String nome, int idade,
 			long cep, int numero) {

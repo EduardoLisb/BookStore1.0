@@ -25,7 +25,9 @@ public class Cliente extends Pessoa {
 		this.pontos_fidelidade = pontos_fidelidade;
 		this.cnpj_filial = cnpj_filial;
 	}
-
+	public Cliente(long cpf) {
+		super(cpf);
+	}
 	public Boolean getEh_professor() {
 		return eh_professor;
 	}

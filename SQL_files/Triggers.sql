@@ -14,7 +14,7 @@ BEGIN
   set NEW.dt_pedido = CURRENT_DATE();
 END$$
 
-# Atualiza o estoque quando a compra é feita
+
 DELIMITER $$
 CREATE TRIGGER tr_AttEstoque
 AFTER INSERT ON compra
@@ -22,8 +22,9 @@ FOR EACH ROW
 BEGIN
   UPDATE estoque
     set dt_ultima_compra = NEW.dt_compra;
-  UPDATE item_estoque
-    set qtd_atual = qtd_atual + (SELECT item_compra.qtd FROM item_compra where fk_cod_compra_item = NEW.cod_compra and cod_produto = (SELECT cod_produto from item_compra where cod_compra = NEW.cod_compra));
+    # Nao entendi oq faz
+#  UPDATE item_estoque
+#    set qtd_atual = qtd_atual + (SELECT item_compra.qtd FROM item_compra where fk_cod_compra_item = NEW.cod_compra and cod_produto = (SELECT cod_produto from item_compra where cod_compra = NEW.cod_compra));
 
 END$$
 
@@ -69,3 +70,17 @@ END$$
 DELIMITER $$
 
 DESC item_compra;
+
+# Adiciona comissão ao vendedor
+DELIMITER $$
+USE bookstore $$
+CREATE TRIGGER tr_Comissao
+AFTER INSERT ON pagamento
+FOR EACH ROW
+BEGIN
+	SET perc_comissao = 0.2;
+    SET valor_comissao = NEW.vl_pago * perc_comissao;
+    # Atualiza tabela compra
+    UPDATE bookstore.compra SET bookstore.compra.vl_comissao = valor_comissao;
+END$$
+DELIMITER $$

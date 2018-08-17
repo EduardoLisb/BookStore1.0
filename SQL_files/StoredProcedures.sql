@@ -18,7 +18,7 @@ DELIMITER ;
 
 DROP procedure IF EXISTS `SP_get_ValorDesconto`
 
-DELIMETER $$
+DELIMITER $$
 USE `bookstore`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_get_ValorDesconto`(pk bigint(11), OUT desconto float)
 BEGIN
@@ -35,7 +35,7 @@ BEGIN
 	END IF;
 END$$
 
-DELIMETER $$
+DELIMITER $$
 USE `bookstore`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_SelectEnvolvidos`(datadeultimareposicao date)
 BEGIN
@@ -73,3 +73,70 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `SP_Get_ItensAbaixoDoMinimo`(CHAR nom
 BEGIN
 	SELECT produto.* from multimidia where (produto.cod_produto = 
 END$$
+
+DROP procedure IF EXISTS `SP_iniciar_compra`;
+DELIMITER $$
+USE `bookstore` $$
+	CREATE DEFINER=`root`@`localhost`
+    PROCEDURE `SP_iniciar_compra` (cod_pdv int(5), cpf_vendedor bigint(11), cpf_cliente bigint(11),
+									OUT cod_compra int(10))
+	BEGIN
+		INSERT INTO compra(cod_compra,vl_desconto,vl_imposto,dt_compra,vl_comissao,vl_total_bruto,
+        vl_total_a_pagar,cod_pdv,cpf_vendedor,cpf_cliente) VALUES
+        (0,0.0,0.0,now(),0.0,0.0,0.0,cod_pdv,cpf_vendedor,cpf_cliente);
+        SET cod_compra = last_insert_id();
+    END$$
+DELIMITER $$
+
+DROP procedure IF EXISTS `SP_calcular_valores_compra`;
+DELIMITER $$
+USE `bookstore` $$
+	CREATE DEFINER=`root`@`localhost`
+	PROCEDURE `SP_calcular_valores_compra` (cod_compra int(10))
+    BEGIN
+		DECLARE vl_desconto float;
+        call SP_get_ValorDesconto(cpf_cliente, vl_desconto);
+		# FALTAM: VALOR COMISSÃO, VALOR IMPOSTO
+		UPDATE compra SET compra.vl_desconto = vl_desconto,
+        compra.vl_total_a_pagar = compra.vl_total_bruto * (1.0 - vl_desconto)
+        WHERE compra.cod_compra = cod_compra;
+    END$$
+DELIMITER $$
+
+
+DROP procedure IF EXISTS `SP_calcular_comissao`;
+DELIMITER $$
+USE `bookstore` $$
+	CREATE DEFINER=`root`@`localhost`
+	PROCEDURE `SP_calcular_comissao`(cod_compra int(10))
+	BEGIN
+		
+    END$$
+DELIMITER $$
+
+DROP procedure IF EXISTS `SP_gerar_NF`;
+DELIMITER $$
+USE `bookstore` $$
+	CREATE DEFINER=`root`@`localhost`
+	PROCEDURE `SP_gerar_NF`(cod_compra int(10))
+	BEGIN
+		SET @valor = (SELECT vl_total_a_pagar FROM compra
+        WHERE compra.cod_compra = cod_compra);
+		INSERT INTO nota_fiscal(codigoNF,dt_emissao,serie,vl_total,cod_compra)
+        VALUES (null, now(), null, @valor, cod_compra);
+    END$$
+DELIMITER $$
+
+
+DROP procedure IF EXISTS `SP_finalizar_compra`;
+DELIMITER $$
+USE `bookstore` $$
+	CREATE DEFINER=`root`@`localhost`
+	PROCEDURE `SP_finalizar_compra`(cod_compra int(10))
+    BEGIN
+		CALL SP_calcular_valores_compra(cod_compra);
+#        CALL SP_calcular_comissao(cod_compra);
+#        CALL SP_calcular_imposto(cod_compra);
+        CALL SP_gerar_NF(cod_compra);
+    END$$
+DELIMITER $$

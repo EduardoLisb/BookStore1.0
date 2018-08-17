@@ -288,22 +288,25 @@ CREATE TABLE IF NOT EXISTS estante (
 );
 
 CREATE TABLE IF NOT EXISTS nota_fiscal (
-	codigoNF integer(10) not null,
+	codigoNF integer(10) not null auto_increment,
     dt_emissao date not null,
-    serie integer(10),
+    serie integer(10) not null auto_increment,
     vl_total double not null,
     cod_compra integer(10) not null unique,
     primary key(codigoNF),
+    unique key(codigoNF, serie),
+    key(dt_emissao),
     constraint fk_cod_compra foreign key (cod_compra) references COMPRA(cod_compra) on update restrict on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS pagamento (
-	cod_pag integer(10) not null,
+	cod_pag integer(10) not null auto_increment,
     vl_pago double not null,
     codigoNF integer(10) unique,
     primary key(cod_pag),
     constraint fk_codigoNF foreign key (codigoNF) references NOTA_FISCAL(codigoNF) on update restrict on delete cascade
 );
+
 CREATE TABLE IF NOT EXISTS compra (
 	cod_compra integer(10) not null auto_increment,
     vl_desconto double,
@@ -377,7 +380,8 @@ CREATE TABLE IF NOT EXISTS inscricao (
 
 CREATE TABLE IF NOT EXISTS comissao_funcionario (
 	id_comissao integer(5) not null,
-    cpf_vendedor bigint(11) not null unique,
+    cpf_vendedor bigint(11) not null,
+    unique key (id_comissao,cpf_vendedor),
     primary key(id_comissao),
     constraint fk_id_comissao foreign key (id_comissao) references COMISSAO(id_comissao)  on update cascade on delete cascade,
     constraint fk_cpf_vendedor_comissao foreign key (cpf_vendedor) references VENDEDOR(cpf) on update cascade on delete cascade

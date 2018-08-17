@@ -21,6 +21,9 @@ public class Pessoa {
 		this.cep = cep;
 		this.numero = numero;
 	}
+	public Pessoa(long cpf) {
+		this.cpf = cpf;
+	}
 
 	public int getNumero() {
 		return numero;
