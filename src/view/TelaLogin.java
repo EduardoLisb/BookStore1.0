@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -22,6 +24,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import connection.ConnectionFactory;
+
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
 
@@ -106,7 +111,45 @@ public class TelaLogin extends JFrame {
 					telaADM.setVisible(true);
 					dispose();
 				} else {
-					
+					System.out.println("else");
+					ConnectionFactory.setLogin(textID.getText(), passwordField.getText());
+					Connection con = ConnectionFactory.getConnection();
+					try {
+						switch(con.getMetaData().getUserName().replaceAll("@localhost", "")) {
+							case "root": {
+								System.out.println("Admin");
+								break;
+							}
+							case "gerente": {
+								System.out.println("Gerente");
+								break;
+							}
+							case "auxiliar": {
+								System.out.println("aux");
+								break;
+							}
+							case "vendedor": {
+								System.out.println("vendedor");
+								break;
+							}
+							case "caixa": {
+								System.out.println("caixa");
+								break;
+							}
+							case "cliente": {
+								System.out.println("cliente");
+								break;
+							}
+							default: {
+								System.out.println("Erro");
+							}
+						}
+						System.out.println(con.getMetaData().getUserName());
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					} finally {
+						con.close();
+					}
 					/* fazer veriicaçao pra saber se o user existe */
 				}
 				

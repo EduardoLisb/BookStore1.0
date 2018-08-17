@@ -12,15 +12,21 @@ public class ConnectionFactory {
 
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	private static final String URL = "jdbc:mysql://localhost:3306/bookstore";
-	private static final String USER = "root";
-	private static final String PASS = "";
-
+//	private static final String USER = "root";
+//	private static final String PASS = "";
+	private static String user = "";
+	private static String pass = "";
+	public static void setLogin(String user, String pass) {
+		ConnectionFactory.user = user;
+		ConnectionFactory.pass = pass;
+	}
+	
 	public static Connection getConnection() {
 
 		try {
 
 			Class.forName(DRIVER);
-			return DriverManager.getConnection(URL, USER, PASS);
+			return DriverManager.getConnection(URL, user, pass);
 
 		} catch (ClassNotFoundException | SQLException ex) {
 			throw new RuntimeException("Erro na conexão", ex);
